@@ -6,7 +6,7 @@ generator client {
 generator erd {
     provider = "prisma-erd-generator"
     includeRelationFromFields = true
-    output = "./erd.md"
+    output = "../../docs/erd.md"
 }
 
 datasource db {

@@ -138,4 +138,3 @@ dist
 .todo
 src/prisma/* 
 !src/prisma/schema.prisma
-!src/prisma/erd.md
