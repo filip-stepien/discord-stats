@@ -17,7 +17,7 @@ datasource db {
 model User {
     id                  String          @id // Discord user ID
     username            String
-    avatarUrl           String
+    avatarUrl           String?
     messages            Message[]
     voiceSessions       VoiceSession[]
     activitySession     ActivitySession[]

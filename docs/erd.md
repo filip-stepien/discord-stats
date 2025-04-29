@@ -9,7 +9,7 @@ VOICE VOICE
   "User" {
     String id "🗝️"
     String username 
-    String avatarUrl 
+    String avatarUrl "❓"
     }
   
 
