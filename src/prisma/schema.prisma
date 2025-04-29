@@ -1,18 +1,73 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client-js"
-  output   = "prisma-client"
+    provider = "prisma-client-js"
+    output   = "prisma-client"
+}
+
+generator erd {
+    provider = "prisma-erd-generator"
+    includeRelationFromFields = true
+    output = "./erd.md"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:sqlite.db"
+    provider = "sqlite"
+    url      = "file:sqlite.db"
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+    id                  String          @id // Discord user ID
+    username            String
+    avatarUrl           String
+    messages            Message[]
+    voiceSessions       VoiceSession[]
+    activitySession     ActivitySession[]
+}
+
+enum ChannelType {
+    TEXT
+    VOICE
+}
+
+model Channel {
+    id                  String          @id // Discord channel ID
+    name                String
+    type                ChannelType
+    messages            Message[]
+    voiceSessions       VoiceSession[]
+}
+
+model Activity {
+    id                  String          @id // Discord Application ID
+    name                String
+    imageUrl            String
+    activitySessions    ActivitySession[]
+}
+
+model Message {
+    id                  String          @id // Discord Application ID
+    user                User            @relation(fields: [userId], references: [id])
+    userId              String
+    channel             Channel         @relation(fields: [channelId], references: [id])
+    channelId           String
+    dateTime            DateTime
+}
+
+model VoiceSession {
+    id                  String          @id @default(uuid())
+    user                User            @relation(fields: [userId], references: [id])
+    userId              String
+    channel             Channel         @relation(fields: [channelId], references: [id])
+    channelId           String
+    startTime           DateTime
+    endTime             DateTime
+}
+
+model ActivitySession {
+    id                  String          @id @default(uuid())
+    user                User            @relation(fields: [userId], references: [id])
+    userId              String
+    activity            Activity        @relation(fields: [activityId], references: [id])
+    activityId          String
+    startTime           DateTime
+    endTime             DateTime
 }

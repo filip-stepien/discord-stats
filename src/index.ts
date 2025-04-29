@@ -10,13 +10,6 @@ const client = new Client({
 
 client.once(Events.ClientReady, async readyClient => {
     console.log(`Hello ${readyClient.user.tag}!`);
-    const user = await prisma.user.create({
-        data: {
-            name: 'Alice',
-            email: 'alice@prisma.io'
-        }
-    });
-    console.log(user);
 });
 
 client.on(Events.VoiceStateUpdate, oldState => {
