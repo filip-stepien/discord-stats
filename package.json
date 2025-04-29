@@ -5,20 +5,27 @@
     "license": "ISC",
     "author": "",
     "type": "module",
-    "main": "index.js",
+    "main": "src/index.js",
+    "prisma": {
+        "schema": "src/prisma/schema.prisma"
+    },
     "scripts": {
-        "start": "tsx index.ts",
-        "dev": "tsx --watch index.ts"
+        "start": "prisma db push && tsx src/index.ts",
+        "clean": "del-cli src/prisma/prisma-client src/prisma/sqlite.db"
     },
     "dependencies": {
+        "@prisma/client": "^6.7.0",
         "discord.js": "^14.19.2",
         "dotenv": "^16.5.0"
     },
     "devDependencies": {
         "@eslint/js": "^9.25.1",
+        "@types/node": "^22.15.3",
+        "del-cli": "^6.0.0",
         "eslint": "^9.25.1",
         "jiti": "^2.4.2",
         "prettier": "^3.5.3",
+        "prisma": "^6.7.0",
         "tsx": "^4.19.4",
         "typescript": "^5.8.3",
         "typescript-eslint": "^8.31.1"
