@@ -1,10 +1,7 @@
+import { logger } from '@/logger';
+import { prisma } from '@/prisma';
 import { BotEventHandler } from '@/types';
 import { Client } from 'discord.js';
-import { PrismaClient } from '@prisma-client';
-import pino from 'pino';
-
-const logger = pino();
-const prisma = new PrismaClient();
 
 async function handler(client: Client<true>) {
     try {
