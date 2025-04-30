@@ -58,8 +58,8 @@ model VoiceSession {
     userId              String
     channel             Channel         @relation(fields: [channelId], references: [id])
     channelId           String
-    startTime           DateTime
-    endTime             DateTime
+    startTime           DateTime        @default(now())
+    endTime             DateTime?
 }
 
 model ActivitySession {

@@ -11,12 +11,13 @@
     },
     "scripts": {
         "start": "prisma db push && tsx src/index.ts",
-        "dev": "tsx src/index.ts",
+        "dev": "npm run clean && prisma db push && tsx src/index.ts",
         "clean": "del-cli src/prisma/prisma-client src/prisma/sqlite.db",
         "studio": "prisma studio"
     },
     "dependencies": {
         "@prisma/client": "^6.7.0",
+        "dayjs": "^1.11.13",
         "discord.js": "^14.19.2",
         "dotenv": "^16.5.0"
     },

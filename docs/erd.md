@@ -40,7 +40,7 @@ VOICE VOICE
     String userId 
     String channelId 
     DateTime startTime 
-    DateTime endTime 
+    DateTime endTime "❓"
     }
   
 
