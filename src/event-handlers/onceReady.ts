@@ -37,10 +37,8 @@ async function syncUsers(client: Client<true>) {
     }
 }
 
-async function handler(client: Client<true>) {
+export const onceReady: BotEventHandler<'ready'> = async client => {
     await connectToDatabase();
     logger.info(`Bot logged as "${client.user.tag}"`);
     await syncUsers(client);
-}
-
-export const onceReady: BotEventHandler<'ready'> = { mode: 'once', event: 'ready', handler };
+};

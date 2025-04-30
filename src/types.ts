@@ -1,7 +1,3 @@
 import { ClientEvents } from 'discord.js';
 
-export type BotEventHandler<T extends keyof ClientEvents> = {
-    mode: 'on' | 'once';
-    event: T;
-    handler: (...args: ClientEvents[T]) => void;
-};
+export type BotEventHandler<T extends keyof ClientEvents> = (...args: ClientEvents[T]) => void;

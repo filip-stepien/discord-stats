@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits } from 'discord.js';
+import { Client, Events, GatewayIntentBits } from 'discord.js';
 import * as eventHandlers from './event-handlers';
 import 'dotenv/config';
 
@@ -10,15 +10,8 @@ const client = new Client({
     ]
 });
 
-function registerEventHandlers(client: Client) {
-    for (const { mode, event, handler } of Object.values(eventHandlers)) {
-        if (mode === 'once') {
-            client.once(event, handler);
-        } else if (mode === 'on') {
-            client.on(event, handler);
-        }
-    }
-}
+client.once(Events.ClientReady, eventHandlers.onceReady);
 
-registerEventHandlers(client);
+client.on(Events.VoiceStateUpdate, eventHandlers.onVoiceStateUpdate);
+
 client.login(process.env.TOKEN);
