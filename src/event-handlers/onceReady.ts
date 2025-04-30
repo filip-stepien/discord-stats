@@ -28,7 +28,7 @@ async function syncUsers(client: Client<true>) {
                 });
             }
 
-            logger.info(`Synced users from guild "${guild.name}"`);
+            logger.debug(`Synced users from guild "${guild.name}"`);
         } catch (e) {
             logger.error(
                 `There was an error while fetching users from guild "${guild.name}":\n${e}`
