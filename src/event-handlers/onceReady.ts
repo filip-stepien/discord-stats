@@ -3,31 +3,44 @@ import { prisma } from '@/prisma';
 import { BotEventHandler } from '@/types';
 import { Client } from 'discord.js';
 
-async function handler(client: Client<true>) {
+async function connectToDatabase() {
     try {
         await prisma.$connect();
         logger.info('Connected to the database');
     } catch (e) {
-        logger.error(`There was en error while connecting to the database:\n${e}`);
+        logger.fatal(`There was en error while connecting to the database:\n${e}`);
+        process.exit(1);
     }
+}
 
-    logger.info(`Bot logged as "${client.user.tag}"`);
-
+async function syncUsers(client: Client<true>) {
     for (const [_, guild] of client.guilds.cache) {
-        const members = await guild.members.fetch();
-        const users = members.map(member => member.user).filter(user => !user.bot);
+        try {
+            const members = await guild.members.fetch();
+            const users = members.map(member => member.user).filter(user => !user.bot);
 
-        for (const user of users) {
-            const { id, username } = user;
-            await prisma.user.upsert({
-                where: { id },
-                update: { username, avatarUrl: user.avatarURL() },
-                create: { id, username }
-            });
+            for (const user of users) {
+                const { id, username } = user;
+                await prisma.user.upsert({
+                    where: { id },
+                    update: { username, avatarUrl: user.avatarURL() },
+                    create: { id, username }
+                });
+            }
+
+            logger.info(`Synced users from guild "${guild.name}"`);
+        } catch (e) {
+            logger.error(
+                `There was an error while fetching users from guild "${guild.name}":\n${e}`
+            );
         }
-
-        logger.info(`Synced users from guild "${guild.name}"`);
     }
+}
+
+async function handler(client: Client<true>) {
+    await connectToDatabase();
+    logger.info(`Bot logged as "${client.user.tag}"`);
+    await syncUsers(client);
 }
 
 export const onceReady: BotEventHandler<'ready'> = { mode: 'once', event: 'ready', handler };
