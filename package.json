@@ -10,8 +10,8 @@
         "schema": "src/prisma/schema.prisma"
     },
     "scripts": {
-        "start": "prisma db push && tsx src/index.ts | pino-pretty",
-        "dev": "tsx src/index.ts | pino-pretty",
+        "start": "prisma db push && tsx src/index.ts",
+        "dev": "tsx src/index.ts",
         "clean": "del-cli src/prisma/prisma-client src/prisma/sqlite.db",
         "studio": "prisma studio"
     },
