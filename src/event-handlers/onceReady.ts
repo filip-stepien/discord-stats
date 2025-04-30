@@ -5,10 +5,14 @@ import { ChannelType, Client, Guild, NonThreadGuildBasedChannel } from 'discord.
 
 async function connectToDatabase() {
     try {
+        logger.info('Attempting to connect to the database...');
+        logger.debug(`Using database URL: ${process.env.DATABASE_URL}`);
+
         await prisma.$connect();
-        logger.info('Connected to the database');
+
+        logger.info('Successfully connected to the database');
     } catch (e) {
-        logger.fatal(`There was en error while connecting to the database:\n${e}`);
+        logger.fatal('Failed to connect to the database:\n' + e);
         process.exit(1);
     }
 }

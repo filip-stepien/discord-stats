@@ -10,16 +10,22 @@
         "schema": "src/prisma/schema.prisma"
     },
     "scripts": {
-        "start": "prisma db push && tsx src/index.ts",
-        "dev": "npm run clean && prisma db push && tsx src/index.ts",
+        "start": "npm run db:use:postgres && npm run db:push:prod && npm run app:prod",
+        "dev": "npm run clean && npm run db:use:sqlite && npm run db:push:dev && npm run app:dev",
         "clean": "del-cli src/prisma/prisma-client src/prisma/sqlite.db",
-        "studio": "prisma studio"
+        "app:prod": "dotenv -e .env -- tsx src/index.ts",
+        "app:dev": "dotenv -e .env.development -- tsx src/index.ts",
+        "db:push:prod": "dotenv -e .env -- prisma db push",
+        "db:push:dev": "dotenv -e .env.development -- prisma db push",
+        "db:use:sqlite": "replace-in-file postgresql sqlite src/prisma/schema.prisma",
+        "db:use:postgres": "replace-in-file sqlite postgresql src/prisma/schema.prisma",
+        "db:studio": "prisma studio"
     },
     "dependencies": {
         "@prisma/client": "^6.7.0",
         "dayjs": "^1.11.13",
         "discord.js": "^14.19.2",
-        "dotenv": "^16.5.0"
+        "dotenv-cli": "^8.0.0"
     },
     "devDependencies": {
         "@eslint/js": "^9.25.1",
@@ -33,6 +39,7 @@
         "prettier": "^3.5.3",
         "prisma": "^6.7.0",
         "prisma-erd-generator": "^2.0.4",
+        "replace-in-file": "^8.3.0",
         "tsx": "^4.19.4",
         "typescript": "^5.8.3",
         "typescript-eslint": "^8.31.1"
