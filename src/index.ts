@@ -13,4 +13,10 @@ client.once(Events.ClientReady, eventHandlers.onceReady);
 
 client.on(Events.VoiceStateUpdate, eventHandlers.onVoiceStateUpdate);
 
+client.on(Events.ChannelCreate, eventHandlers.onChannelCreate);
+
+client.on(Events.ChannelUpdate, eventHandlers.onChannelUpdate);
+
+client.on(Events.ChannelDelete, eventHandlers.onChannelDelete);
+
 client.login(process.env.TOKEN);
