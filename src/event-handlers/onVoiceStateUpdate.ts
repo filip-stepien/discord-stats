@@ -81,9 +81,12 @@ export const onVoiceStateUpdate: BotEventHandler<'voiceStateUpdate'> = async (pr
     const oldChannel = prev.channel;
     const newChannel = curr.channel;
 
-    if (oldChannel === null && newChannel) {
+    if (!oldChannel && newChannel) {
         await startVoiceSession(user, newChannel);
-    } else if (oldChannel && newChannel == null) {
+    } else if (oldChannel && !newChannel) {
         await endVoiceSession(user);
+    } else if (oldChannel && newChannel && oldChannel.id !== newChannel.id) {
+        await endVoiceSession(user);
+        await startVoiceSession(user, newChannel);
     }
 };
