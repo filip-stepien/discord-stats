@@ -19,4 +19,8 @@ client.on(Events.ChannelUpdate, eventHandlers.onChannelUpdate);
 
 client.on(Events.ChannelDelete, eventHandlers.onChannelDelete);
 
+client.on(Events.GuildMemberAdd, eventHandlers.onGuildMemberAdd);
+
+client.on(Events.GuildMemberRemove, eventHandlers.onGuildMemberRemove);
+
 client.login(process.env.TOKEN);

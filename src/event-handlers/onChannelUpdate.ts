@@ -5,7 +5,7 @@ import { ChannelHelper } from '@/helpers/ChannelHelper';
 
 export const onChannelUpdate: BotEventHandler<'channelUpdate'> = async (_, newChannel) => {
     if (!ChannelHelper.isGuildChannel(newChannel)) return;
-    const { id, name, type } = newChannel;
+    const { id, name, guildId, type } = newChannel;
 
     if (!ChannelHelper.isSupportedChannelType(type)) return;
 
@@ -18,7 +18,7 @@ export const onChannelUpdate: BotEventHandler<'channelUpdate'> = async (_, newCh
             );
 
             await prisma.channel.create({
-                data: { id, name, type: ChannelHelper.channelTypeToString(type) }
+                data: { id, name, guildId, type: ChannelHelper.channelTypeToString(type) }
             });
 
             return;

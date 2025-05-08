@@ -14,13 +14,23 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model Guild {
+    id        String    @id // Discord guild ID
+    name      String
+    users     User[]
+    channels  Channel[]
+}
+
+
 model User {
-    id                  String          @id // Discord user ID
-    username            String
-    avatarUrl           String?
-    messages            Message[]
-    voiceSessions       VoiceSession[]
-    activitySession     ActivitySession[]
+    id              String            @id // Discord user ID
+    username        String
+    avatarUrl       String?
+    guildId         String
+    guild           Guild             @relation(fields: [guildId], references: [id])
+    messages        Message[]
+    voiceSessions   VoiceSession[]
+    activitySession ActivitySession[]
 }
 
 enum ChannelType {
@@ -29,22 +39,24 @@ enum ChannelType {
 }
 
 model Channel {
-    id                  String          @id // Discord channel ID
-    name                String
-    type                ChannelType
-    messages            Message[]
-    voiceSessions       VoiceSession[]
+    id              String            @id // Discord channel ID
+    name            String
+    type            ChannelType
+    guildId         String
+    guild           Guild             @relation(fields: [guildId], references: [id])
+    messages        Message[]
+    voiceSessions   VoiceSession[]
 }
 
 model Activity {
-    id                  String          @id // Discord Application ID
+    id                  String          @id // Discord activity ID
     name                String
     imageUrl            String
     activitySessions    ActivitySession[]
 }
 
 model Message {
-    id                  String          @id // Discord Application ID
+    id                  String          @id // Discord message ID
     user                User            @relation(fields: [userId], references: [id])
     userId              String
     channel             Channel         @relation(fields: [channelId], references: [id], onDelete: Cascade)

@@ -6,10 +6,17 @@ erDiagram
 VOICE VOICE
         }
     
+  "Guild" {
+    String id "🗝️"
+    String name 
+    }
+  
+
   "User" {
     String id "🗝️"
     String username 
     String avatarUrl "❓"
+    String guildId 
     }
   
 
@@ -17,6 +24,7 @@ VOICE VOICE
     String id "🗝️"
     String name 
     ChannelType type 
+    String guildId 
     }
   
 
@@ -52,10 +60,14 @@ VOICE VOICE
     DateTime endTime 
     }
   
+    "Guild" o{--}o "User" : "users"
+    "Guild" o{--}o "Channel" : "channels"
+    "User" o|--|| "Guild" : "guild"
     "User" o{--}o "Message" : "messages"
     "User" o{--}o "VoiceSession" : "voiceSessions"
     "User" o{--}o "ActivitySession" : "activitySession"
     "Channel" o|--|| "ChannelType" : "enum:type"
+    "Channel" o|--|| "Guild" : "guild"
     "Channel" o{--}o "Message" : "messages"
     "Channel" o{--}o "VoiceSession" : "voiceSessions"
     "Activity" o{--}o "ActivitySession" : "activitySessions"

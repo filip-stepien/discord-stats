@@ -17,7 +17,7 @@ async function connectToDatabase() {
     }
 }
 
-async function syncUsers(guild: Guild) {
+async function syncGuildUsers(guild: Guild) {
     const members = await guild.members.fetch();
     const users = members.map(member => member.user).filter(user => !user.bot);
 
@@ -26,14 +26,14 @@ async function syncUsers(guild: Guild) {
         await prisma.user.upsert({
             where: { id },
             update: { username, avatarUrl: user.avatarURL() },
-            create: { id, username }
+            create: { id, username, guildId: guild.id }
         });
     }
 
     logger.debug(`Synced members from guild "${guild.name}": ${users.length}`);
 }
 
-async function syncChannels(guild: Guild) {
+async function syncGuildChannels(guild: Guild) {
     const channels = await guild.channels.fetch();
     const textChannels = channels.filter(channel => channel?.type === ChannelType.GuildText);
     const voiceChannels = channels.filter(channel => channel?.type === ChannelType.GuildVoice);
@@ -43,7 +43,7 @@ async function syncChannels(guild: Guild) {
         await prisma.channel.upsert({
             where: { id },
             update: { name },
-            create: { id, name, type }
+            create: { id, name, type, guildId: guild.id }
         });
     };
 
@@ -62,11 +62,23 @@ async function syncChannels(guild: Guild) {
     );
 }
 
+async function syncGuild(guild: Guild) {
+    const { id, name } = guild;
+    await prisma.guild.upsert({
+        where: { id },
+        update: { name },
+        create: { id, name }
+    });
+
+    logger.debug(`Synced guild "${name}"`);
+}
+
 async function syncGuilds(client: Client<true>) {
     for (const [_, guild] of client.guilds.cache) {
         try {
-            await syncUsers(guild);
-            await syncChannels(guild);
+            await syncGuild(guild);
+            await syncGuildUsers(guild);
+            await syncGuildChannels(guild);
         } catch (e) {
             logger.error(`There was an error while trying to sync guild "${guild.name}":\n${e}`);
         }
